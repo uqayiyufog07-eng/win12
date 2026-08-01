@@ -6,7 +6,10 @@
     "enabled": true
   },
   "assets": {
-    "directory": "."
+    "directory": ".",
+    // 纯静态站点：目录请求自动补 index.html，404 交给自定义页面
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
   },
   "compatibility_flags": [
     "nodejs_compat"

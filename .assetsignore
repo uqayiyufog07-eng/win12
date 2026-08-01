@@ -1,0 +1,23 @@
+# 不需要作为静态资源部署到 Cloudflare 的内容
+.git
+.github
+.assetsignore
+.wrangler
+tauri
+readme
+node_modules
+wrangler.jsonc
+package.json
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# 文档与协议文本（不影响站点运行）
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+README.md
+changelog.md
+
+# 语言目录中的非语言文件
+lang/LICENSE
+lang/TRANSLATORS

@@ -1,4 +1,4 @@
-name: Update Lang Submodule
+name: Update Lang Files
 
 on:
   schedule:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: update-lang-submodule
+  group: update-lang-files
   cancel-in-progress: false
 
 jobs:
@@ -16,14 +16,21 @@ jobs:
       contents: write
 
     steps:
-      - name: Checkout repository with submodules
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          submodules: true
 
-      - name: Update lang submodule
+      # 语言文件原为 Git 子模块，为支持 Cloudflare 部署已内联为普通文件，
+      # 因此这里改为直接从上游仓库同步内容。
+      - name: Fetch upstream locales
         run: |
-          git submodule update --remote lang
+          git clone --depth 1 https://github.com/win12-online/win12-locales.git /tmp/win12-locales
+
+      - name: Sync language files
+        run: |
+          mkdir -p lang/lang
+          cp /tmp/win12-locales/lang/*.properties lang/lang/
+          cp /tmp/win12-locales/LICENSE          lang/LICENSE
+          cp /tmp/win12-locales/TRANSLATORS      lang/TRANSLATORS
 
       - name: Commit and push if changed
         run: |
@@ -31,6 +38,6 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add lang
           git diff --cached --quiet && exit 0
-          git commit -m "chore: update lang submodule"
+          git commit -m "chore: update lang files from upstream locales"
           git pull --rebase origin main
           git push
